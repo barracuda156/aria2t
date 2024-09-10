@@ -25,8 +25,8 @@
 #include "program.h"
 #include "websocket.h"
 #include "b64.h"
-#include "jeezson/jeezson.h"
-#include "fourmat/fourmat.h"
+#include "jeezson.h"
+#include "fourmat.h"
 
 #include "keys.h"
 

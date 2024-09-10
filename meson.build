@@ -8,9 +8,6 @@ project('aria2t', 'c',
 	],
 )
 
-# subprojects require meson.build that I do not want to mess with.
-run_command('git submodule update --init --recursive'.split(' '))
-
 add_project_arguments([
 	'-Wno-override-init',
 	'-DVERSION="@0@"'.format(meson.project_version()),
@@ -21,8 +18,8 @@ executable('aria2t',
 	'program.c',
 	'websocket.c',
 	'b64.c',
-	'fourmat/fourmat.c',
-	'jeezson/jeezson.c',
+	'fourmat.c',
+	'jeezson.c',
 	custom_target(
 		'keys',
 		input: ['aria2t.c'],
