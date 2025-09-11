@@ -1,7 +1,6 @@
 #define _GNU_SOURCE
 
 #include <assert.h>
-#include <endian.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <netdb.h>
@@ -14,6 +13,20 @@
 #include <sys/types.h>
 #include <sys/uio.h>
 #include <unistd.h>
+
+#if defined(__APPLE__)
+
+#include <libkern/OSByteOrder.h>
+#define htobe16(x) OSSwapHostToBigInt16(x)
+#define htobe64(x) OSSwapHostToBigInt64(x)
+#define be16toh(x) OSSwapBigToHostInt16(x)
+#define be64toh(x) OSSwapBigToHostInt64(x)
+
+#else
+
+#include <endian.h>
+
+#endif
 
 #include "program.h"
 #include "websocket.h"
