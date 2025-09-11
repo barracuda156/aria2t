@@ -27,7 +27,7 @@ executable('aria2t',
 		command: ['keys.gen', '@INPUT@'],
 		capture: true,
 	),
-	dependencies: dependency('ncursesw'),
+	dependencies: dependency('ncurses'),
 	install: true,
 )
 
