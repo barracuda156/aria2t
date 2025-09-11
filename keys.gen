@@ -8,13 +8,13 @@ echo '#pragma GCC diagnostic push'
 echo '#pragma GCC diagnostic ignored "-Wmissing-field-initializers"'
 echo '#pragma GCC diagnostic ignored "-Wunused-parameter"'
 
-sed -n '/K_[a-zA-Z_.-]*_parse/{s/.*\(K_[a-zA-Z_.-]*\)_parse.*/\1/p}' "$source" |
+gsed -n '/K_[a-zA-Z_.-]*_parse/{s/.*\(K_[a-zA-Z_.-]*\)_parse.*/\1/p}' "$source" |
 sort |
 uniq |
 while read -r name
 do
 	table=$(
-		sed -n '/_\(parse\|none\)/! {
+		gsed -n '/_\(parse\|none\)/! {
 			/'$name'_[a-zA-Z_.-]*/ {
 				s:.*\('$name'_\([a-zA-Z_.-]*\)\).*:\2,\t\1:
 				: subst_dashes
@@ -36,7 +36,7 @@ do
 %{
 enum ${name}_e_ {
 	${name}_none
-$(printf '%s' "$table" | sed 's/.*\t\(.*\)/\t, \1/')
+$(printf '%s' "$table" | gsed 's/.*\t\(.*\)/\t, \1/')
 };
 %}
 %struct-type

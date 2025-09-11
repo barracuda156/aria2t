@@ -4,10 +4,10 @@ while IFS= read -r line; do
 	(INCLUDE\(*\))
 		name=${line#INCLUDE(}
 		name=${name%)}
-		sed -n '/\/\*MAN('"$name"')/{n;:o;N;s/\*\/$//;To;s/[\t]* \*  *//g;p}' "$@"
+		gsed -n '/\/\*MAN('"$name"')/{n;:o;N;s/\*\/$//;To;s/[\t]* \*  *//g;p}' "$@"
 		;;
 	(SHELL\(*\))
-		git shortlog -sn | cut -f2|sed -e 'i.UR' -e 'a.UE'
+		git shortlog -sn | cut -f2|gsed -e 'i.UR' -e 'a.UE'
 		cmd=${line#SHELL(}
 		cmd=${cmd%)}
 		eval "$cmd"
