@@ -22,6 +22,11 @@
 #include <time.h>
 #include <unistd.h>
 
+#ifdef __APPLE__
+# include <signal.h>
+# include <xlocale.h>
+#endif
+
 #include "program.h"
 #include "websocket.h"
 #include "b64.h"
