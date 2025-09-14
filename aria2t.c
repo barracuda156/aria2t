@@ -218,7 +218,7 @@ static char session_file[PATH_MAX];
 static bool is_local; /* Server runs on local host? */
 
 struct pollfd pfds[2];
-static struct timespec interval;
+static int interval;
 static void(*on_timeout)(void);
 
 typedef void(*RPCHandler)(JSONNode const *result, void *arg);
@@ -1822,10 +1822,7 @@ arm_periodic_update_timer(void)
 		0 < global.upload_speed;
 
 	on_timeout = update_downloads;
-	interval = (struct timespec){
-		.tv_sec = any_activity ? 1 : 3,
-		.tv_nsec = 271 * 1000000,
-	};
+	interval = any_activity ? 1271 : 3271;
 }
 
 static void
@@ -5019,11 +5016,9 @@ on_ws_close(void)
 
 	if (try_connect != on_timeout) {
 		on_timeout = try_connect;
-		interval = (struct timespec){
-			.tv_sec = 1,
-		};
+		interval = 1000;
 	} else {
-		interval.tv_sec *= 2;
+		interval *= 2;
 	}
 
 	clear_rpc_requests();
@@ -5174,8 +5169,13 @@ main(int argc, char *argv[])
 	sigset_t ss;
 	sigemptyset(&ss);
 
+	sigset_t origmask;
+
 	for (;;) {
-		switch (ppoll(pfds, ARRAY_SIZE(pfds), on_timeout ? &interval : NULL, &ss)) {
+		sigprocmask(SIG_SETMASK, &ss, &origmask);
+		int ready = poll(pfds, ARRAY_SIZE(pfds), on_timeout ? interval : -1);
+		sigprocmask(SIG_SETMASK, &origmask, NULL);
+		switch (ready) {
 		case 0:
 			on_timeout();
 			break;
